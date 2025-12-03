@@ -92,6 +92,7 @@ int main() {
       printf("%s\n", num_str);
       if ((num_digits % 2) == 0) {
         printf("even len string found\n");
+        // take the first half and the second half, compare them
       }
       free(num_str);
     }
