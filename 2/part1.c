@@ -37,9 +37,7 @@ char* read_file(char file_name[]) {
   return file_contents;
 }
 
-int main() {
-
-  char* file_contents = read_file("input.txt");
+range_t* get_ranges(char file_contents[]) {
 
   printf("%s\n", file_contents);
 
@@ -53,13 +51,19 @@ int main() {
   }
 
   range_t* ranges = malloc(sizeof(range_t) * range_count);
+
+  if (ranges != NULL) {
+    free(ranges);
+    free(file_contents);
+    exit(EXIT_FAILURE);
+  }
+
   int ranges_idx = 0;
 
   char* iterator = file_contents;
   char* range;
 
   while ((range = strsep(&iterator, ",")) != NULL) {
-    printf("%s\n", range);
     char* second_number = range;
     char* first_number;
     first_number = strsep(&second_number, "-");
@@ -67,6 +71,15 @@ int main() {
                  strtol(second_number, NULL, 10)};
     ranges[ranges_idx++] = r;
   }
+
+  return ranges;
+}
+
+int main() {
+
+  char* file_contents = read_file("input.txt");
+  // these are all the ranges, now what do we do with them?
+  range_t* ranges = get_ranges(file_contents);
 
   free(ranges);
   free(file_contents);
