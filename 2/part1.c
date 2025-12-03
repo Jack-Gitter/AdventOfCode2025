@@ -4,8 +4,8 @@
 #include <string.h>
 
 typedef struct range {
-  int start;
-  int end;
+  long start;
+  long end;
 } range_t;
 
 char* read_file(char file_name[]) {
@@ -78,25 +78,45 @@ range_t* get_ranges(char file_contents[], int* ranges_len) {
 
 int main() {
 
+  long total = 0;
   char* file_contents = read_file("input.txt");
   // these are all the ranges, now what do we do with them?
   int ranges_len;
   range_t* ranges = get_ranges(file_contents, &ranges_len);
-  printf("ranges_len: %d\n", ranges_len);
 
-  for (int i = 0; i < ranges_len; i++) {
-    for (int j = ranges[i].start; j <= ranges[i].end; j++) {
-      int num_digits = floor(log10(abs(j))) + 1;
+  for (long i = 0; i < ranges_len; i++) {
+    for (long j = ranges[i].start; j <= ranges[i].end; j++) {
+      int num_digits = floor(log10(labs(j))) + 1;
       char* num_str = malloc(num_digits + 1);
-      snprintf(num_str, num_digits + 1, "%d", j);
-      printf("%s\n", num_str);
+      snprintf(num_str, num_digits + 1, "%zu", j);
       if ((num_digits % 2) == 0) {
-        printf("even len string found\n");
-        // take the first half and the second half, compare them
+        char* first_half = malloc(sizeof(char) * (num_digits / 2) + 1);
+        if (first_half == NULL) {
+          free(ranges);
+          free(file_contents);
+          exit(EXIT_FAILURE);
+        }
+        char* second_half = malloc(sizeof(char) * (num_digits / 2) + 1);
+        if (second_half == NULL) {
+          free(ranges);
+          free(first_half);
+          free(file_contents);
+          exit(EXIT_FAILURE);
+        }
+        strncpy(first_half, num_str, num_digits / 2);
+        strncpy(second_half, num_str + (num_digits / 2), num_digits / 2);
+        first_half[num_digits / 2] = '\0';
+        second_half[num_digits / 2] = '\0';
+        if (strcmp(first_half, second_half) == 0) {
+          total += j;
+        }
+        free(first_half);
+        free(second_half);
       }
       free(num_str);
     }
   }
+  printf("total is: %zu\n", total);
 
   free(ranges);
   free(file_contents);
