@@ -18,6 +18,10 @@ int main() {
     char letter = line[0];
     char* idx = strstr(line, "\n");
 
+    if (idx == NULL) {
+      exit(EXIT_FAILURE);
+    }
+
     int num = strtol(line + 1, &idx, 10);
 
     for (int i = 0; i < num; i++) {
