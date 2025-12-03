@@ -16,13 +16,8 @@ int main() {
 
   while (fgets(line, MAX_LINE_LENGTH, file) != NULL) {
     char letter = line[0];
-    char* idx = strstr(line, "\n");
 
-    if (idx == NULL) {
-      exit(EXIT_FAILURE);
-    }
-
-    int num = strtol(line + 1, &idx, 10);
+    int num = strtol(line + 1, NULL, 10);
 
     for (int i = 0; i < num; i++) {
       if (letter == 'L') {
