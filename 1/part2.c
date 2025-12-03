@@ -46,4 +46,5 @@ int main() {
   }
 
   printf("%d\n", res);
+  fclose(file);
 }
