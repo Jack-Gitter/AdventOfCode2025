@@ -37,9 +37,7 @@ char* read_file(char file_name[]) {
   return file_contents;
 }
 
-range_t* get_ranges(char file_contents[]) {
-
-  printf("%s\n", file_contents);
+range_t* get_ranges(char file_contents[], size_t* ranges_len) {
 
   char* result = file_contents;
   char target = ',';
@@ -50,9 +48,11 @@ range_t* get_ranges(char file_contents[]) {
     result++;
   }
 
+  *ranges_len = range_count;
+
   range_t* ranges = malloc(sizeof(range_t) * range_count);
 
-  if (ranges != NULL) {
+  if (ranges == NULL) {
     free(ranges);
     free(file_contents);
     exit(EXIT_FAILURE);
@@ -79,7 +79,15 @@ int main() {
 
   char* file_contents = read_file("input.txt");
   // these are all the ranges, now what do we do with them?
-  range_t* ranges = get_ranges(file_contents);
+  size_t ranges_len;
+  range_t* ranges = get_ranges(file_contents, &ranges_len);
+  printf("ranges_len: %zu\n", ranges_len);
+
+  for (size_t i = 0; i < ranges_len; i++) {
+    for (size_t j = ranges[i].start; j <= ranges[i].end; j++) {
+      printf("%zu\n", j);
+    }
+  }
 
   free(ranges);
   free(file_contents);
