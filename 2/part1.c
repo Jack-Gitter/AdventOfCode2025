@@ -29,6 +29,7 @@ char* read_file(char file_name[]) {
     exit(EXIT_FAILURE);
   }
 
+  // overwrite the \n with \0 at the end of the file
   file_contents[file_size - 1] = '\0';
 
   fclose(file);
