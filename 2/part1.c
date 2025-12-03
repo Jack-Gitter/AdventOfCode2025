@@ -76,13 +76,8 @@ range_t* get_ranges(char file_contents[], int* ranges_len) {
   return ranges;
 }
 
-int main() {
-
+long find_pairs(range_t* ranges, int ranges_len) {
   long total = 0;
-  char* file_contents = read_file("input.txt");
-  int ranges_len;
-  range_t* ranges = get_ranges(file_contents, &ranges_len);
-
   for (long i = 0; i < ranges_len; i++) {
     for (long j = ranges[i].start; j <= ranges[i].end; j++) {
       int num_digits = floor(log10(labs(j))) + 1;
@@ -92,15 +87,13 @@ int main() {
         char* first_half = malloc(sizeof(char) * (num_digits / 2) + 1);
         if (first_half == NULL) {
           free(ranges);
-          free(file_contents);
-          exit(EXIT_FAILURE);
+          return -1;
         }
         char* second_half = malloc(sizeof(char) * (num_digits / 2) + 1);
         if (second_half == NULL) {
           free(ranges);
           free(first_half);
-          free(file_contents);
-          exit(EXIT_FAILURE);
+          return -1;
         }
         strncpy(first_half, num_str, num_digits / 2);
         strncpy(second_half, num_str + (num_digits / 2), num_digits / 2);
@@ -115,8 +108,21 @@ int main() {
       free(num_str);
     }
   }
-  printf("total is: %zu\n", total);
+  return total;
+}
+int main() {
 
+  char* file_contents = read_file("input.txt");
+  int ranges_len;
+  range_t* ranges = get_ranges(file_contents, &ranges_len);
+  long res = find_pairs(ranges, ranges_len);
+  if (res < 0) {
+    free(file_contents);
+    free(ranges);
+    free(file_contents);
+    exit(EXIT_FAILURE);
+  }
+  printf("res is: %zu\n", res);
   free(ranges);
   free(file_contents);
 }
