@@ -3,9 +3,9 @@
 #include <string.h>
 
 typedef struct range {
-  int start;
-  int end;
-} range;
+  long start;
+  long end;
+} range_t;
 
 char* read_file(char file_name[]) {
   FILE* file = fopen(file_name, "r");
@@ -52,7 +52,8 @@ int main() {
     result++;
   }
 
-  range* ranges = malloc(sizeof(range) * range_count);
+  range_t* ranges = malloc(sizeof(range_t) * range_count);
+  int ranges_idx = 0;
 
   char* iterator = file_contents;
   char* range;
@@ -62,11 +63,9 @@ int main() {
     char* second_number = range;
     char* first_number;
     first_number = strsep(&second_number, "-");
-    printf("first number: %s", first_number);
-    printf(" second number: %s\n", second_number);
-
-    // parse start and end, and then create range objects and put them into
-    // ranges arr
+    range_t r = {strtol(first_number, NULL, 10),
+                 strtol(second_number, NULL, 10)};
+    ranges[ranges_idx++] = r;
   }
 
   free(ranges);
