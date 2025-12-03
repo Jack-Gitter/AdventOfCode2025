@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MAX_LINE_LENGTH 10
 int main() {
@@ -15,8 +16,9 @@ int main() {
 
   while (fgets(line, MAX_LINE_LENGTH, file) != NULL) {
     char letter = line[0];
+    char* idx = strstr(line, "\n");
 
-    int num = atoi(line + 1);
+    int num = strtol(line + 1, &idx, 10);
 
     for (int i = 0; i < num; i++) {
       if (letter == 'L') {
