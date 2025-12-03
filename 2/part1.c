@@ -80,7 +80,6 @@ int main() {
 
   long total = 0;
   char* file_contents = read_file("input.txt");
-  // these are all the ranges, now what do we do with them?
   int ranges_len;
   range_t* ranges = get_ranges(file_contents, &ranges_len);
 
