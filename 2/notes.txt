@@ -1,0 +1,4 @@
+1) number has to be even to be valid
+2) generate possible numbers in range from a loop
+3) process half of the numbers digits as a string, then the other half. Then convert to numbers
+4) compare to see if they are equal
