@@ -11,22 +11,16 @@ typedef struct {
 
 stack init_stack() {
   stack s = {};
-  s.index = 0;
+  s.index = -1;
   return s;
 }
 
 char pop(stack* s) {
-  if (s->index == 0) {
-    return s->elems[s->index];
+  if (s->index == -1) {
+    perror("stack underflow");
+    exit(EXIT_FAILURE);
   }
   return s->elems[s->index--];
-}
-
-void print_stack(stack* s) {
-  char str[13];
-  memcpy(str, s->elems, 12);
-  str[12] = '\0';
-  printf("%s\n", str);
 }
 
 char push(stack* s, char to_push) {
@@ -34,13 +28,18 @@ char push(stack* s, char to_push) {
     perror("stack overflow");
     exit(EXIT_FAILURE);
   }
-
   s->elems[++s->index] = to_push;
   return to_push;
+}
+void print_stack(stack* s) {
+  char str[13];
+  memcpy(str, s->elems, s->index + 1);
+  str[s->index + 1] = '\0';
+  printf("stack is: %s\n", str);
 }
 
 char peek(stack* s) { return s->elems[s->index]; }
 
 int used_space(stack* s) { return s->index + 1; }
 
-unsigned long to_num(stack* s) { return strtoul(s->elems, NULL, 10); }
+unsigned long long to_num(stack* s) { return strtoul(s->elems, NULL, 10); }

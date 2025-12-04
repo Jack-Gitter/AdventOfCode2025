@@ -35,20 +35,26 @@ char* read_file(char file_name[]) {
 unsigned long get_line_joltage(char line[]) {
   stack s = init_stack();
   int line_len = strlen(line);
+  printf("line is %s\n", line);
   for (int i = 0; i < line_len; i++) {
+    printf("new stack is: ");
+    print_stack(&s);
     if (i == 0) {
       push(&s, line[i]);
     } else if (12 - used_space(&s) == line_len - i) {
       push(&s, line[i]);
     } else {
-      printf("peek s is: %d", peek(&s) - '0');
-      printf("compared item is: %d", line[i] - '0');
-      while (peek(&s) - '0' <= line[i] - '0') {
+      while (s.index != -1 && peek(&s) - '0' < line[i] - '0') {
+        printf("stack is: ");
+        print_stack(&s);
+        printf("\n");
         pop(&s);
       }
       push(&s, line[i]);
     }
   }
+  printf("stack is: ");
+  print_stack(&s);
   return to_num(&s);
 }
 int main() {
@@ -63,5 +69,5 @@ int main() {
     total_joltage += line_joltage;
   }
 
-  printf("total is: %zu\n", total_joltage);
+  printf("total is: %lu\n", total_joltage);
 }
