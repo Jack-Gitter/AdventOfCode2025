@@ -32,7 +32,7 @@ void push(stack* s, char to_push) {
 }
 
 void print_stack(stack* s) {
-  char str[13];
+  char str[MAX_LEN + 1];
   memcpy(str, s->elems, s->index + 1);
   str[s->index + 1] = '\0';
   printf("stack is: %s\n", str);
@@ -49,7 +49,7 @@ char peek(stack* s) {
 int used_space(stack* s) { return s->index + 1; }
 
 unsigned long long to_num(stack* s) {
-  char str[13];
+  char str[MAX_LEN + 1];
   memcpy(str, s->elems, s->index + 1);
   str[s->index + 1] = '\0';
   return strtoul(str, NULL, 10);
