@@ -17,7 +17,7 @@ stack init_stack() {
 
 char pop(stack* s) {
   if (s->index == -1) {
-    perror("stack underflow");
+    fprintf(stderr, "stack underflow\n");
     exit(EXIT_FAILURE);
   }
   return s->elems[s->index--];
@@ -25,7 +25,7 @@ char pop(stack* s) {
 
 void push(stack* s, char to_push) {
   if (s->index == MAX_LEN - 1) {
-    perror("stack overflow");
+    fprintf(stderr, "stack overflow\n");
     exit(EXIT_FAILURE);
   }
   s->elems[++s->index] = to_push;
@@ -38,7 +38,13 @@ void print_stack(stack* s) {
   printf("stack is: %s\n", str);
 }
 
-char peek(stack* s) { return s->elems[s->index]; }
+char peek(stack* s) {
+  if (s->index == -1) {
+    fprintf(stderr, "peek on empty stack\n");
+    exit(EXIT_FAILURE);
+  }
+  return s->elems[s->index];
+}
 
 int used_space(stack* s) { return s->index + 1; }
 
