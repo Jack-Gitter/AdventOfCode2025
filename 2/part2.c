@@ -83,8 +83,8 @@ long find_pairs(range_t* ranges, int ranges_len) {
       int num_digits = floor(log10(labs(j))) + 1;
       char* str_num = malloc(num_digits + 1);
       snprintf(str_num, num_digits + 1, "%zu", j);
-      printf("strnum is %s\n", str_num);
-      for (int k = 0; k < num_digits; k++) {
+      for (int k = 0; k < num_digits - 1; k++) {
+        int repeated = true;
 
         int substring_len = k + 1;
         char* substring = malloc(sizeof(char) * substring_len + 1);
@@ -96,13 +96,20 @@ long find_pairs(range_t* ranges, int ranges_len) {
 
         strncpy(substring, str_num, substring_len);
         substring[substring_len] = '\0';
-        printf("substring is: %s\n", substring);
 
         for (int l = k + 1; l < num_digits; l += substring_len) {
           char* temp = malloc(sizeof(char) * substring_len + 1);
           strncpy(temp, str_num + l, substring_len);
           temp[substring_len] = '\0';
-          printf("temp is %s\n", temp);
+          if (strcmp(temp, substring) != 0) {
+            repeated = false;
+            break;
+          }
+        }
+        if (repeated) {
+          printf("found one!%zu\n", j);
+          total += j;
+          break;
         }
         free(substring);
       }
