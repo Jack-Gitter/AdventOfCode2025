@@ -23,14 +23,14 @@ char pop(stack* s) {
   return s->elems[s->index--];
 }
 
-char push(stack* s, char to_push) {
+void push(stack* s, char to_push) {
   if (s->index == MAX_LEN - 1) {
     perror("stack overflow");
     exit(EXIT_FAILURE);
   }
   s->elems[++s->index] = to_push;
-  return to_push;
 }
+
 void print_stack(stack* s) {
   char str[13];
   memcpy(str, s->elems, s->index + 1);
@@ -42,4 +42,10 @@ char peek(stack* s) { return s->elems[s->index]; }
 
 int used_space(stack* s) { return s->index + 1; }
 
-unsigned long long to_num(stack* s) { return strtoul(s->elems, NULL, 10); }
+unsigned long long to_num(stack* s) {
+  char str[13];
+  memcpy(str, s->elems, s->index + 1);
+  str[s->index + 1] = '\0';
+  printf("stack is: %s\n", str);
+  return strtoul(str, NULL, 10);
+}
