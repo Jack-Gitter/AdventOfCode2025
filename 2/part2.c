@@ -82,25 +82,38 @@ long find_pairs(range_t* ranges, int ranges_len) {
     for (long j = ranges[i].start; j <= ranges[i].end; j++) {
       int num_digits = floor(log10(labs(j))) + 1;
       char* str_num = malloc(num_digits + 1);
-      snprintf(str_num, num_digits + 1, "%ld", j);
-      printf("string num is: %s\n", str_num);
+      snprintf(str_num, num_digits + 1, "%zu", j);
 
-      for (long k = 0; k < num_digits; k++) {
+      if ((num_digits % 2) == 0) {
+        char* first_half = malloc(sizeof(char) * (num_digits / 2) + 1);
 
-        int substring_len = k + 2;
-        char* substring = malloc(sizeof(char) * substring_len);
-
-        if (substring == NULL) {
+        if (first_half == NULL) {
           free(ranges);
           return -1;
         }
 
-        strncpy(substring, str_num, substring_len - 1);
-        substring[substring_len - 1] = '\0';
-        printf("substring is: %s\n", substring);
+        char* second_half = malloc(sizeof(char) * (num_digits / 2) + 1);
 
-        free(substring);
+        if (second_half == NULL) {
+          free(ranges);
+          free(first_half);
+          return -1;
+        }
+
+        strncpy(first_half, str_num, num_digits / 2);
+        strncpy(second_half, str_num + (num_digits / 2), num_digits / 2);
+
+        first_half[num_digits / 2] = '\0';
+        second_half[num_digits / 2] = '\0';
+
+        if (strcmp(first_half, second_half) == 0) {
+          total += j;
+        }
+
+        free(first_half);
+        free(second_half);
       }
+
       free(str_num);
     }
   }
