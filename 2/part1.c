@@ -81,35 +81,45 @@ long find_pairs(range_t* ranges, int ranges_len) {
   for (int i = 0; i < ranges_len; i++) {
     for (long j = ranges[i].start; j <= ranges[i].end; j++) {
       int num_digits = floor(log10(labs(j))) + 1;
-      char* num_str = malloc(num_digits + 1);
-      snprintf(num_str, num_digits + 1, "%zu", j);
+      char* str_num = malloc(num_digits + 1);
+      snprintf(str_num, num_digits + 1, "%zu", j);
+
       if ((num_digits % 2) == 0) {
         char* first_half = malloc(sizeof(char) * (num_digits / 2) + 1);
+
         if (first_half == NULL) {
           free(ranges);
           return -1;
         }
+
         char* second_half = malloc(sizeof(char) * (num_digits / 2) + 1);
+
         if (second_half == NULL) {
           free(ranges);
           free(first_half);
           return -1;
         }
-        strncpy(first_half, num_str, num_digits / 2);
-        strncpy(second_half, num_str + (num_digits / 2), num_digits / 2);
+
+        strncpy(first_half, str_num, num_digits / 2);
+        strncpy(second_half, str_num + (num_digits / 2), num_digits / 2);
+
         first_half[num_digits / 2] = '\0';
         second_half[num_digits / 2] = '\0';
+
         if (strcmp(first_half, second_half) == 0) {
           total += j;
         }
+
         free(first_half);
         free(second_half);
       }
-      free(num_str);
+
+      free(str_num);
     }
   }
   return total;
 }
+
 int main() {
 
   char* file_contents = read_file("input.txt");
