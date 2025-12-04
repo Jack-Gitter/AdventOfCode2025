@@ -46,6 +46,5 @@ unsigned long long to_num(stack* s) {
   char str[13];
   memcpy(str, s->elems, s->index + 1);
   str[s->index + 1] = '\0';
-  printf("stack is: %s\n", str);
   return strtoul(str, NULL, 10);
 }
