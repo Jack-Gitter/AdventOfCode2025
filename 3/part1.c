@@ -2,6 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct joltage {
+  char first_num;
+  int first_num_idx;
+  char second_num;
+  int second_num_idx;
+} joltage_t;
+
 char* read_file(char file_name[]) {
   FILE* file = fopen(file_name, "r");
 
@@ -30,13 +37,6 @@ char* read_file(char file_name[]) {
 
   return file_contents;
 }
-
-typedef struct joltage {
-  char first_num;
-  int first_num_idx;
-  char second_num;
-  int second_num_idx;
-} joltage_t;
 
 joltage_t get_line_joltage(char line[]) {
   joltage_t line_joltage = {};
