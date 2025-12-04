@@ -78,7 +78,7 @@ range_t* get_ranges(char file_contents[], int* ranges_len) {
 
 long find_pairs(range_t* ranges, int ranges_len) {
   long total = 0;
-  for (long i = 0; i < ranges_len; i++) {
+  for (int i = 0; i < ranges_len; i++) {
     for (long j = ranges[i].start; j <= ranges[i].end; j++) {
       int num_digits = floor(log10(labs(j))) + 1;
       char* num_str = malloc(num_digits + 1);
