@@ -19,7 +19,7 @@ char* read_file(char file_name[]) {
 
   if (file_contents == NULL) {
     fclose(file);
-    exit(EXIT_FAILURE);
+    return NULL;
   }
 
   int chunk_size = 1;
@@ -27,7 +27,7 @@ char* read_file(char file_name[]) {
 
   if (read != file_size) {
     fclose(file);
-    exit(EXIT_FAILURE);
+    return NULL;
   }
 
   // overwrite the \n with \0 at the end of the file
@@ -56,7 +56,7 @@ range_t* get_ranges(char file_contents[], int* ranges_len) {
   if (ranges == NULL) {
     free(ranges);
     free(file_contents);
-    exit(EXIT_FAILURE);
+    return NULL;
   }
 
   int ranges_idx = 0;
@@ -113,15 +113,28 @@ long find_pairs(range_t* ranges, int ranges_len) {
 int main() {
 
   char* file_contents = read_file("input.txt");
+
+  if (file_contents == NULL) {
+    exit(EXIT_FAILURE);
+  }
+
   int ranges_len;
   range_t* ranges = get_ranges(file_contents, &ranges_len);
+
+  if (ranges == NULL) {
+    free(file_contents);
+    exit(EXIT_FAILURE);
+  }
+
   long res = find_pairs(ranges, ranges_len);
+
   if (res < 0) {
     free(file_contents);
     free(ranges);
     free(file_contents);
     exit(EXIT_FAILURE);
   }
+
   printf("res is: %zu\n", res);
   free(ranges);
   free(file_contents);
