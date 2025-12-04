@@ -37,6 +37,7 @@ unsigned long get_line_joltage(char line[]) {
   int line_len = strlen(line);
   printf("line is %s\n", line);
   for (int i = 0; i < line_len; i++) {
+    // monotonoic stack algorithm
   }
   return to_num(&s);
 }
