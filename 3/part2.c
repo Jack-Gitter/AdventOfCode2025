@@ -1,13 +1,7 @@
+#include "stack.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-typedef struct joltage {
-  char first_num;
-  int first_num_idx;
-  char second_num;
-  int second_num_idx;
-} joltage_t;
 
 char* read_file(char file_name[]) {
   FILE* file = fopen(file_name, "r");
@@ -38,51 +32,35 @@ char* read_file(char file_name[]) {
   return file_contents;
 }
 
-joltage_t get_line_joltage(char line[]) {
-  joltage_t line_joltage = {};
-  for (int i = 0; i < strlen(line) - 1; i++) {
+unsigned long get_line_joltage(char line[]) {
+  stack s = init_stack();
+  int line_len = strlen(line);
+  for (int i = 0; i < line_len; i++) {
     if (i == 0) {
-      line_joltage.first_num = line[i];
-      line_joltage.first_num_idx = i;
+      push(&s, line[i]);
+    } else if (12 - used_space(&s) == line_len - i) {
+      push(&s, line[i]);
     } else {
-      int new_num = line[i] - '0';
-      int current_num = line_joltage.first_num - '0';
-      if (new_num > current_num) {
-        line_joltage.first_num = line[i];
-        line_joltage.first_num_idx = i;
+      printf("peek s is: %d", peek(&s) - '0');
+      printf("compared item is: %d", line[i] - '0');
+      while (peek(&s) - '0' <= line[i] - '0') {
+        pop(&s);
       }
+      push(&s, line[i]);
     }
   }
-  for (int i = line_joltage.first_num_idx + 1; i < strlen(line); i++) {
-    if (i == line_joltage.first_num_idx + 1) {
-      line_joltage.second_num = line[i];
-      line_joltage.second_num_idx = i;
-    } else {
-      int new_num = line[i] - '0';
-      int current_num = line_joltage.second_num - '0';
-      if (new_num > current_num) {
-        line_joltage.second_num = line[i];
-        line_joltage.second_num_idx = i;
-      }
-    }
-  }
-  return line_joltage;
+  return to_num(&s);
 }
 int main() {
   char* file_contents = read_file("input.txt");
 
   char* iterator = file_contents;
   char* line;
-  long total_joltage = 0;
+  unsigned long total_joltage = 0;
 
   while ((line = strsep(&iterator, "\n")) != NULL) {
-    joltage_t line_joltage = get_line_joltage(line);
-    char joltage[3];
-    joltage[0] = line_joltage.first_num;
-    joltage[1] = line_joltage.second_num;
-    joltage[2] = '\0';
-    int max_joltage = strtol(joltage, NULL, 10);
-    total_joltage += max_joltage;
+    unsigned long line_joltage = get_line_joltage(line);
+    total_joltage += line_joltage;
   }
 
   printf("total is: %zu\n", total_joltage);
