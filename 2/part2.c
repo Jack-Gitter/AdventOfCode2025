@@ -104,9 +104,9 @@ long find_pairs(range_t* ranges, int ranges_len) {
             repeated = false;
             break;
           }
+          free(temp);
         }
         if (repeated) {
-          printf("found one!%zu\n", j);
           total += j;
           break;
         }
