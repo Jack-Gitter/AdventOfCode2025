@@ -80,7 +80,6 @@ long find_pairs(range_t* ranges, int ranges_len) {
   long total = 0;
   for (int i = 0; i < ranges_len; i++) {
     for (long j = ranges[i].start; j <= ranges[i].end; j++) {
-      bool all_same = true;
       int num_digits = floor(log10(labs(j))) + 1;
       char* str_num = malloc(num_digits + 1);
       snprintf(str_num, num_digits + 1, "%ld", j);
@@ -98,23 +97,7 @@ long find_pairs(range_t* ranges, int ranges_len) {
 
         strncpy(substring, str_num, substring_len - 1);
         substring[substring_len - 1] = '\0';
-        printf("substring len is: %d\n", substring_len - 1);
         printf("substring is: %s\n", substring);
-
-        char* temp = malloc(sizeof(char) * substring_len);
-        for (long l = k + 1; l < num_digits; l += substring_len - 1) {
-          strncpy(temp, str_num + l, substring_len - 1);
-          temp[substring_len - 1] = '\0';
-          printf("temp string is: %s\n", temp);
-          if (strcmp(temp, substring) != 0) {
-            all_same = false;
-            break;
-          }
-        }
-
-        if (all_same == true) {
-          total += j;
-        }
 
         free(substring);
       }
