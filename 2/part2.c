@@ -85,7 +85,6 @@ long find_pairs(range_t* ranges, int ranges_len) {
       snprintf(str_num, num_digits + 1, "%zu", j);
       for (int k = 0; k < num_digits - 1; k++) {
         int repeated = true;
-
         int substring_len = k + 1;
         char* substring = malloc(sizeof(char) * substring_len + 1);
 
