@@ -35,9 +35,26 @@ char* read_file(char file_name[]) {
 unsigned long get_line_joltage(char line[]) {
   stack s = init_stack();
   int line_len = strlen(line);
-  printf("line is %s\n", line);
   for (int i = 0; i < line_len; i++) {
-    // monotonoic stack algorithm
+    if (i == 0) {
+      push(&s, line[i]);
+      continue;
+    }
+    int furthest_back_index = 12 - (line_len - i);
+    if (furthest_back_index < 0) {
+      furthest_back_index = 0;
+    }
+    int pop_count = 0;
+    int curr_idx = s.index;
+    while (curr_idx >= furthest_back_index && line[i] - '0' > peek(&s) - '0') {
+      pop(&s);
+      curr_idx--;
+      pop_count++;
+    }
+    if (pop_count == 0 && s.index == 11) {
+      continue;
+    }
+    push(&s, line[i]);
   }
   return to_num(&s);
 }

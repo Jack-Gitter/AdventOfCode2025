@@ -8,3 +8,29 @@ for part 2 ------------
 2) if the new item is greater than the previous item, replace it. keep replacing
 while the new item is higher than the previous item.
 3) if we reach a point where (12 - current len) = len of remaining items, then just take all remaining items
+
+
+
+
+// this can hold 4 elements
+1 1 1 _  
+
+
+// we are at "5"
+1 2 3 5 1
+
+
+if current line element > stack[end of stack idx - # elements reamining in line]:
+	just simply append to the end, you don't have enough elements remaining
+
+if current element > stack[idx]: 
+	while (
+
+
+
+// what index would this get inserted at
+
+
+
+
+
