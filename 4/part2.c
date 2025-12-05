@@ -92,5 +92,7 @@ int main() {
       }
     }
   }
+
+  free(map);
   printf("total is: %d\n", total);
 }
