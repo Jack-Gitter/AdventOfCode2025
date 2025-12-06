@@ -74,31 +74,8 @@ int main() {
   char* iterator = file_contents;
   char* line;
 
-  int curr_line = 0;
-  int opp_idx = 0;
-  while ((line = strsep(&iterator, "\n")) != NULL && strcmp(line, "") != 0) {
-    if (curr_line < row_count_before_operators) {
-      char* next_start = line;
-      for (int i = 0; i < column_count; i++) {
-        long num = strtol(next_start, &next_start, 10);
-        if (equations[i] == NULL) {
-          equations[i] = malloc(sizeof(long*) * column_count);
-        }
-        equations[i][curr_line] = num;
-      }
-    } else {
-      for (int i = 0; i < strlen(line); i++) {
-        if (isspace(line[i])) {
-          continue;
-        } else {
-          operators[opp_idx++] = line[i];
-        }
-      }
-    }
-
-    curr_line++;
-  }
-
+  // we can still use the same summation logic, so long as we're able to
+  // format the equations correctly
   long total = 0;
   for (int i = 0; i < column_count; i++) {
     char operator = operators[i];

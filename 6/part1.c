@@ -82,7 +82,7 @@ int main() {
       for (int i = 0; i < column_count; i++) {
         long num = strtol(next_start, &next_start, 10);
         if (equations[i] == NULL) {
-          equations[i] = malloc(sizeof(long*) * column_count);
+          equations[i] = malloc(sizeof(long) * column_count);
         }
         equations[i][curr_line] = num;
       }
