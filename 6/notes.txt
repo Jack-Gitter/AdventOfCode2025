@@ -1,1 +1,2 @@
-just make the input a 2d array
+2d array, then loop over the columns to accumulate the numbers and "equations", 
+then the same logic as part1
