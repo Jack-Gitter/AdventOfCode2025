@@ -1,4 +1,3 @@
-#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -45,57 +44,41 @@ int get_row_count(char file_contents[]) {
 
 int get_col_count(char file_contents[]) {
 
-  int column_count = 0;
-  bool processing_number = false;
-  bool current_char_is_num = false;
-
-  for (int i = 0; i < strlen(file_contents) && file_contents[i] != '\n'; i++) {
-    current_char_is_num = isdigit(file_contents[i]);
-    if (current_char_is_num && !processing_number) {
-      column_count++;
-      processing_number = true;
-    }
-    if (!current_char_is_num) {
-      processing_number = false;
-    }
+  int i = 0;
+  while (file_contents[i] != '\n') {
+    i++;
   }
-  return column_count;
+  return i;
 }
 
 int main() {
 
   char* file_contents = read_file("input.txt");
-  int row_count_before_operators = get_row_count(file_contents);
+  int row_count = get_row_count(file_contents) + 1;
   int column_count = get_col_count(file_contents);
+  printf("row count %d col count %d\n", row_count, column_count);
 
-  long** equations = malloc(sizeof(long*) * row_count_before_operators);
-  char* operators = malloc(sizeof(char) * column_count);
+  char** input = malloc(sizeof(char*) * row_count);
 
-  char* iterator = file_contents;
-  char* line;
-
-  // we can still use the same summation logic, so long as we're able to
-  // format the equations correctly
-  long total = 0;
-  for (int i = 0; i < column_count; i++) {
-    char operator = operators[i];
-    long start = 0;
-    if (operator == '*') {
-      start = 1;
+  int row = 0;
+  int col = 0;
+  for (int i = 0; file_contents[i] != '\0'; i++) {
+    col++;
+    if (file_contents[i] == '\n') {
+      col = 0;
+      row++;
+      continue;
     }
-    printf("%c", operators[i]);
-    for (int j = 0; j < row_count_before_operators; j++) {
-      if (operator == '*') {
-        start *= equations[i][j];
-      } else {
-        start += equations[i][j];
-      }
-      printf("%lu ", equations[i][j]);
+    if (input[row] == NULL) {
+      input[row] = malloc(sizeof(char) * column_count);
     }
-    total += start;
-    printf("\n");
+    input[row][col] = file_contents[i];
   }
 
-  printf("total is %lu\n", total);
-  free(file_contents);
+  for (int i = 0; i < row_count; i++) {
+    for (int j = 0; j < column_count; j++) {
+      printf("%c", input[i][j]);
+    }
+    printf("\n");
+  }
 }

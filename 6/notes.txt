@@ -1,2 +1,1 @@
-just make a filling buckets approach. find the highest and lowest fresh ingredient ranges, and then make an array of that length and fill in all the 
-fresh indicies with 1 and all invalids with 0. Then loop over the list of ingrideints, and index into the array IF the index is < len, and easy
+just make the input a 2d array
