@@ -75,58 +75,50 @@ int main() {
   char* line;
 
   int curr_line = 0;
-  int opp_index = 0;
+  int opp_idx = 0;
   while ((line = strsep(&iterator, "\n")) != NULL && strcmp(line, "") != 0) {
-    if (curr_line < column_count) {
+    if (curr_line < row_count_before_operators) {
       char* next_start = line;
-      for (int i = 0; i < row_count_before_operators; i++) {
+      for (int i = 0; i < column_count; i++) {
         long num = strtol(next_start, &next_start, 10);
-        if (equations[curr_line] == NULL) {
-          equations[row_count_before_operators] =
-              malloc(sizeof(long*) * column_count);
+        if (equations[i] == NULL) {
+          equations[i] = malloc(sizeof(long*) * column_count);
         }
-        equations[curr_line][i] = num;
+        equations[i][curr_line] = num;
       }
     } else {
       for (int i = 0; i < strlen(line); i++) {
         if (isspace(line[i])) {
           continue;
         } else {
-          operators[opp_index++] = line[i];
+          operators[opp_idx++] = line[i];
         }
       }
     }
+
     curr_line++;
   }
 
-  for (int i = 0; i < column_count; i++) {
-    for (int j = 0; j < row_count_before_operators; j++) {
-      printf("%lu ", equations[i][j]);
-    }
-    printf("\n");
-  }
-
   long total = 0;
-  for (int i = 0; i < row_count_before_operators; i++) {
-    printf("operator is %c\n", operators[i]);
-    long current = 0;
-    if (operators[i] == '*') {
-      current = 1;
+  for (int i = 0; i < column_count; i++) {
+    char operator = operators[i];
+    long start = 0;
+    if (operator == '*') {
+      start = 1;
     }
-    for (int j = 0; j < column_count; j++) {
-      printf("current number is %lu\n", equations[i][j]);
-      if (operators[i] == '*') {
-        current *= equations[i][j];
+    printf("%c", operators[i]);
+    for (int j = 0; j < row_count_before_operators; j++) {
+      if (operator == '*') {
+        start *= equations[i][j];
       } else {
-        current += equations[i][j];
+        start += equations[i][j];
       }
       printf("%lu ", equations[i][j]);
     }
-    total += current;
-    printf("current is %lu\n", current);
+    total += start;
     printf("\n");
   }
 
+  printf("total is %lu\n", total);
   free(file_contents);
-  printf("total is: %lu\n", total);
 }
