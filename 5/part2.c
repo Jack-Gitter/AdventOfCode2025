@@ -3,9 +3,55 @@
 #include <string.h>
 
 typedef struct range {
-  long low;
-  long high;
+  unsigned long low;
+  unsigned long high;
 } range_t;
+
+void merge_sort(range_t arr[], int left, int right) {
+
+  if (left >= right) {
+    return;
+  }
+  int mid = (left + right) / 2;
+  merge_sort(arr, left, mid);
+  merge_sort(arr, mid + 1, right);
+
+  int left_len = mid - left + 1;
+  int right_len = right - mid;
+
+  range_t* left_arr = malloc(sizeof(range_t) * left_len);
+  range_t* right_arr = malloc(sizeof(range_t) * right_len);
+
+  for (int i = 0; i < left_len; i++) {
+    left_arr[i] = arr[left + i];
+  }
+
+  for (int i = 0; i < right_len; i++) {
+    right_arr[i] = arr[mid + 1 + i];
+  }
+
+  int index = left;
+  int left_index = 0;
+  int right_index = 0;
+
+  while (left_index < left_len && right_index < right_len) {
+    if (left_arr[left_index].low < right_arr[right_index].low) {
+      arr[index++] = left_arr[left_index++];
+    } else {
+      arr[index++] = right_arr[right_index++];
+    }
+  }
+
+  while (left_index < left_len) {
+    arr[index++] = left_arr[left_index++];
+  }
+  while (right_index < right_len) {
+    arr[index++] = right_arr[right_index++];
+  }
+
+  free(left_arr);
+  free(right_arr);
+}
 
 char* read_file(char file_name[]) {
   FILE* file = fopen(file_name, "r");
@@ -68,37 +114,46 @@ int main() {
   while ((line = strsep(&iterator, "\n")) != NULL && strcmp(line, "") != 0) {
     char* high_str = line;
     char* low_str = strsep(&high_str, "-");
-    long low = strtol(low_str, NULL, 10);
-    long high = strtol(high_str, NULL, 10);
+    unsigned long low = strtoul(low_str, NULL, 10);
+    unsigned long high = strtoul(high_str, NULL, 10);
     range_t range = {low, high};
     ranges[range_idx++] = range;
   }
 
-  long total = 0;
+  merge_sort(ranges, 0, range_count - 1);
   for (int i = 0; i < range_count; i++) {
-    total += ranges[i].high - ranges[i].low + 1;
+    printf("range is %lu-%lu\n", ranges[i].low, ranges[i].high);
   }
-  for (int i = 0; i < range_count; i++) {
-    for (int j = i + 1; j < range_count; j++) {
-      long high = 0;
-      long low = 0;
-      if (ranges[j].low > ranges[i].low) {
-        low = ranges[j].low;
-      } else {
-        low = ranges[i].low;
+
+  // merge the sorted ranges
+
+  range_t* new_ranges = malloc(sizeof(range_t) * range_count);
+  int new_ranges_idx = 0;
+  unsigned long current_high = ranges[0].high;
+  unsigned long current_low = ranges[0].low;
+  for (int i = 1; i < range_count; i++) {
+    if (ranges[i].low <= current_high) {
+      if (ranges[i].high > current_high) {
+        current_high = ranges[i].high;
       }
-      if (ranges[j].high < ranges[i].high) {
-        high = ranges[j].high;
-      } else {
-        high = ranges[i].high;
-      }
-      long overlap_count = high - low + 1;
-      if (overlap_count > 0) {
-        total -= overlap_count;
-      }
+      continue;
+    } else {
+      range_t range = {current_low, current_high};
+      new_ranges[new_ranges_idx++] = range;
+      current_low = ranges[i].low;
+      current_high = ranges[i].high;
     }
   }
 
-  // compute overlap
+  range_t r = {current_low, current_high};
+  new_ranges[new_ranges_idx] = r;
+
+  unsigned long total = 0;
+  for (int i = 0; i < new_ranges_idx; i++) {
+    printf("nums in range %lu-%lu are %lu\n", new_ranges[i].low,
+           new_ranges[i].high, new_ranges[i].high - new_ranges[i].low + 1);
+    total += new_ranges[i].high - new_ranges[i].low + 1;
+  }
+
   printf("total is %lu\n", total);
 }
