@@ -59,6 +59,7 @@ int main() {
   printf("row count %d col count %d\n", row_count, column_count);
 
   char** input = malloc(sizeof(char*) * row_count);
+  long** equations = malloc(sizeof(long*) * (row_count - 1));
 
   int row = 0;
   int col = 0;
@@ -75,9 +76,19 @@ int main() {
     input[row][col] = file_contents[i];
   }
 
-  for (int i = 0; i < row_count; i++) {
-    for (int j = 0; j < column_count; j++) {
-      printf("%c", input[i][j]);
+  // parse the input by looping just the other way, go column
+  // by column to get the numbers
+
+  for (int i = 0; i <= column_count; i++) {
+    char num[row_count];
+    for (int j = 0; j < row_count - 1; j++) {
+      num[j] = input[j][i];
+      if (equations[i] == NULL) {
+        equations[i] = malloc(sizeof(long) * row_count);
+      }
+      long number = strtol(num, NULL, 10);
+      equations[i][j] = number;
+      // printf("%c", input[j][i]);
     }
     printf("\n");
   }
