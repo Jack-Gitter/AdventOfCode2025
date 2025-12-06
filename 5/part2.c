@@ -125,8 +125,6 @@ int main() {
     printf("range is %lu-%lu\n", ranges[i].low, ranges[i].high);
   }
 
-  // merge the sorted ranges
-
   range_t* new_ranges = malloc(sizeof(range_t) * range_count);
   int new_ranges_idx = 0;
   unsigned long current_high = ranges[0].high;
