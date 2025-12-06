@@ -144,7 +144,7 @@ int main() {
   new_ranges[new_ranges_idx] = r;
 
   unsigned long total = 0;
-  for (int i = 0; i < new_ranges_idx; i++) {
+  for (int i = 0; i < new_ranges_idx + 1; i++) {
     total += new_ranges[i].high - new_ranges[i].low + 1;
   }
 
