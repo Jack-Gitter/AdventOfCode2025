@@ -65,11 +65,68 @@ int get_col_count(char file_contents[]) {
 int main() {
 
   char* file_contents = read_file("input.txt");
-  int row_count = get_row_count(file_contents);
-
+  int row_count_before_operators = get_row_count(file_contents);
   int column_count = get_col_count(file_contents);
 
-  printf("col cound is %d\n", column_count);
-  printf("line count before operators is %d\n", row_count);
+  long** equations = malloc(sizeof(long*) * row_count_before_operators);
+  char* operators = malloc(sizeof(char) * column_count);
+
+  char* iterator = file_contents;
+  char* line;
+
+  int curr_line = 0;
+  int opp_index = 0;
+  while ((line = strsep(&iterator, "\n")) != NULL && strcmp(line, "") != 0) {
+    if (curr_line < column_count) {
+      char* next_start = line;
+      for (int i = 0; i < row_count_before_operators; i++) {
+        long num = strtol(next_start, &next_start, 10);
+        if (equations[curr_line] == NULL) {
+          equations[row_count_before_operators] =
+              malloc(sizeof(long*) * column_count);
+        }
+        equations[curr_line][i] = num;
+      }
+    } else {
+      for (int i = 0; i < strlen(line); i++) {
+        if (isspace(line[i])) {
+          continue;
+        } else {
+          operators[opp_index++] = line[i];
+        }
+      }
+    }
+    curr_line++;
+  }
+
+  for (int i = 0; i < column_count; i++) {
+    for (int j = 0; j < row_count_before_operators; j++) {
+      printf("%lu ", equations[i][j]);
+    }
+    printf("\n");
+  }
+
+  long total = 0;
+  for (int i = 0; i < row_count_before_operators; i++) {
+    printf("operator is %c\n", operators[i]);
+    long current = 0;
+    if (operators[i] == '*') {
+      current = 1;
+    }
+    for (int j = 0; j < column_count; j++) {
+      printf("current number is %lu\n", equations[i][j]);
+      if (operators[i] == '*') {
+        current *= equations[i][j];
+      } else {
+        current += equations[i][j];
+      }
+      printf("%lu ", equations[i][j]);
+    }
+    total += current;
+    printf("current is %lu\n", current);
+    printf("\n");
+  }
+
   free(file_contents);
+  printf("total is: %lu\n", total);
 }
