@@ -121,9 +121,6 @@ int main() {
   }
 
   merge_sort(ranges, 0, range_count - 1);
-  for (int i = 0; i < range_count; i++) {
-    printf("range is %lu-%lu\n", ranges[i].low, ranges[i].high);
-  }
 
   range_t* new_ranges = malloc(sizeof(range_t) * range_count);
   int new_ranges_idx = 0;
@@ -148,10 +145,10 @@ int main() {
 
   unsigned long total = 0;
   for (int i = 0; i < new_ranges_idx; i++) {
-    printf("nums in range %lu-%lu are %lu\n", new_ranges[i].low,
-           new_ranges[i].high, new_ranges[i].high - new_ranges[i].low + 1);
     total += new_ranges[i].high - new_ranges[i].low + 1;
   }
 
   printf("total is %lu\n", total);
+  free(ranges);
+  free(new_ranges);
 }
