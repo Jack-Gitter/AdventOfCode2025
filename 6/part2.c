@@ -128,13 +128,6 @@ int main() {
     }
   }
 
-  for (int i = 0; i < equation_count; i++) {
-    for (int j = 0; j < row_count - 1; j++) {
-      printf("%lu ", equations[i][j]);
-    }
-    printf("\n");
-  }
-
   char* operators = malloc(sizeof(char) * col_count);
 
   int opp_idx = 0;
@@ -147,7 +140,28 @@ int main() {
   }
 
   for (int i = 0; i < col_count; i++) {
-
-    printf("%c ", operators[i]);
   }
+
+  long total = 0;
+  for (int i = 0; i < equation_count; i++) {
+    char operator = operators[i];
+    long start = 0;
+    if (operator == '*') {
+      start = 1;
+    }
+    printf("%c", operators[i]);
+    for (int j = 0; j < row_count - 1; j++) {
+      if (operator == '*') {
+        start *= equations[i][j];
+      } else {
+        start += equations[i][j];
+      }
+      printf("%lu ", equations[i][j]);
+    }
+    printf(" = %lu", start);
+    total += start;
+    printf("\n");
+  }
+
+  printf("total is %lu\n", total);
 }
